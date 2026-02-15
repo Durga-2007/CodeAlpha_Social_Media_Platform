@@ -1,0 +1,64 @@
+{% extends 'social/base.html' %}
+
+{% block content %}
+<div class="card auth-form fade-in"
+    style="max-width: 600px; margin: 60px auto; padding: 0; overflow:hidden; border:none; box-shadow: 0 30px 60px rgba(0,0,0,0.12);">
+    <div
+        style="background: linear-gradient(135deg, var(--primary), var(--primary-light)); padding: 40px 20px; text-align:center; color:white;">
+        <h2 style="font-family:var(--text-serif); font-size:2rem; margin-bottom:10px;"><i class="fas fa-edit"></i>
+            Refine your Creation</h2>
+        <p style="font-weight:700; opacity:0.9;">Polish your masterpiece before the world sees it.</p>
+    </div>
+
+    <div style="padding: 40px 30px;">
+        <form method="post">
+            {% csrf_token %}
+            <div class="edit-form-wrapper" style="margin-bottom:30px;">
+                {{ form.as_p }}
+            </div>
+
+            <div style="display:flex; gap:15px;">
+                <button type="submit" class="btn btn-primary" style="flex:2; padding:15px; border-radius:15px;">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <a href="{% url 'feed' %}" class="btn mic-btn"
+                    style="flex:1; display:flex; align-items:center; justify-content:center; text-decoration:none; border-radius:15px;">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .edit-form-wrapper p {
+        margin-bottom: 25px;
+    }
+
+    .edit-form-wrapper label {
+        display: block;
+        font-weight: 800;
+        color: var(--text-main);
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+    }
+
+    .edit-form-wrapper textarea,
+    .edit-form-wrapper input {
+        width: 100%;
+        padding: 18px;
+        border: 2px solid var(--border);
+        border-radius: 18px;
+        font-family: var(--text-sans);
+        font-size: 1.1rem;
+        transition: 0.3s;
+        outline: none;
+    }
+
+    .edit-form-wrapper textarea:focus,
+    .edit-form-wrapper input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 10px 20px rgba(79, 70, 229, 0.05);
+    }
+</style>
+{% endblock %}
