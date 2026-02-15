@@ -1,0 +1,70 @@
+{% extends 'social/base.html' %}
+
+{% block content %}
+<div class="card auth-form fade-in"
+    style="max-width: 600px; margin: 60px auto; padding: 0; overflow:hidden; border:none; box-shadow: 0 30px 60px rgba(0,0,0,0.12);">
+    <div
+        style="background: linear-gradient(135deg, var(--secondary), var(--accent)); padding: 50px 30px; text-align:center; color:white;">
+        <i class="fas fa-paint-brush" style="font-size:3.5rem; margin-bottom:20px; display:block;"></i>
+        <h2 style="font-family:var(--text-serif); font-size:2.5rem; margin-bottom:10px;">Join the Hub</h2>
+        <p style="font-weight:700; opacity:0.9;">Start your creative journey today.</p>
+    </div>
+
+    <div style="padding: 40px 35px;">
+        <form method="post">
+            {% csrf_token %}
+            {% if form.errors %}
+            <div
+                style="color:white; background:#ef4444; font-size:0.95rem; margin-bottom:20px; text-align:center; padding:12px; border-radius:12px; font-weight:700;">
+                <i class="fas fa-exclamation-triangle"></i> Please correct the studio details below.
+            </div>
+            {% endif %}
+
+            <div class="registration-form">
+                {% for field in form %}
+                <div class="form-group" style="margin-bottom:20px;">
+                    <label for="{{ field.id_for_label }}"
+                        style="display:block; font-weight:800; color:var(--text-main); margin-bottom:8px;">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                    {% if field.help_text %}
+                    <p style="font-size:0.75rem; color:var(--text-light); margin-top:5px;">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% for error in field.errors %}
+                    <div style="color:#ef4444; font-size:0.85rem; font-weight:700; margin-top:5px;">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-primary"
+                style="width:100%; padding:18px; border-radius:18px; font-size:1.1rem; margin-top:10px; background:linear-gradient(135deg, var(--secondary), var(--primary-light));">
+                <i class="fas fa-user-plus"></i> <span>Create Account</span>
+            </button>
+        </form>
+
+        <p style="text-align:center; margin-top:30px; font-weight:700; color:var(--text-light);">
+            Already an artist? <a href="{% url 'login' %}" style="color:var(--secondary); text-decoration:none;">Login
+                here</a>
+        </p>
+    </div>
+</div>
+
+<style>
+    .auth-form input {
+        width: 100%;
+        padding: 14px;
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        font-family: var(--text-sans);
+        font-size: 1rem;
+        transition: 0.3s;
+    }
+
+    .auth-form input:focus {
+        border-color: var(--secondary);
+        outline: none;
+    }
+</style>
+{% endblock %}
