@@ -1,0 +1,110 @@
+{% extends 'social/base.html' %}
+
+{% block content %}
+<div class="card profile-header fade-in" style="background: linear-gradient(to bottom right, #ffffff, #fdf2f8);">
+    <div style="display:flex; align-items:center; gap:35px; margin-bottom:30px;">
+        <div class="story-ring-large">
+            {% if profile_user.profile.profile_pic %}
+            <img src="{{ profile_user.profile.profile_pic.url }}" alt="Profile Picture" class="avatar-large"
+                style="width:150px !important; height:150px !important; border-radius:50% !important; object-fit:cover !important;">
+            {% else %}
+            <div class="avatar-large"
+                style="background:#e2e8f0; display:flex; align-items:center; justify-content:center;">
+                <i class="fas fa-user" style="font-size:60px; color:#94a3b8;"></i>
+            </div>
+            {% endif %}
+        </div>
+        <div class="profile-main-info">
+            <h2 style="font-size:2.5rem; letter-spacing:-1px;">@{{ profile_user.username }}</h2>
+            {% if profile_user.profile.location %}
+            <p style="font-size:1rem; color:var(--secondary); font-weight:700; margin-bottom:10px;">
+                <i class="fas fa-map-marker-alt"></i> {{ profile_user.profile.location }}
+            </p>
+            {% endif %}
+            <div class="stats" style="justify-content: flex-start; gap:40px;">
+                <div class="stat-item">
+                    <span class="stat-value" style="color:var(--primary);">
+                        {{ posts.count }}
+                    </span>
+                    <span class="stat-label">Creations</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" style="color:var(--secondary);">
+                        {{ follower_count }}
+                    </span>
+                    <span class="stat-label">Followers</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">
+                        {{ following_count }}
+                    </span>
+                    <span class="stat-label">Following</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if profile_user.profile.bio %}
+    <div class="profile-bio"
+        style="margin-bottom:30px; padding:20px; background:white; border-radius:20px; border:1px solid var(--border); font-style: italic; color:var(--text-main); font-size:1.1rem;">
+        <i class="fas fa-quote-left" style="color:var(--border); margin-right:10px;"></i>
+        {{ profile_user.profile.bio }}
+    </div>
+    {% endif %}
+
+    <div style="display:flex; gap:15px;">
+        {% if user != profile_user %}
+        <form action="{% url 'follow_user' profile_user.username %}" method="post" style="flex:1;">
+            {% csrf_token %}
+            <button type="submit" class="btn {% if is_following %}mic-btn{% else %}btn-primary{% endif %}"
+                style="width:100%; border-radius:18px;">
+                {% if is_following %}
+                <i class="fas fa-user-minus"></i> Unfollow
+                {% else %}
+                <i class="fas fa-user-plus"></i> Follow Creator
+                {% endif %}
+            </button>
+        </form>
+        {% elif user == profile_user %}
+        <a href="{% url 'settings' %}" class="btn btn-primary"
+            style="flex:1; text-align:center; text-decoration:none; border-radius:18px;">
+            <i class="fas fa-user-edit"></i> Edit Artistic Profile
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<h3 style="font-family:var(--text-serif); margin-bottom:30px; font-size:1.8rem; color:var(--text-main);">
+    <i class="fas fa-palette" style="color:var(--secondary);"></i> Creations by @{{ profile_user.username }}
+</h3>
+
+<div class="feed">
+    {% for post in posts %}
+    <div class="card post fade-in">
+        {% if post.image %}
+        <img src="{{ post.image.url }}" alt="Art piece" class="post-image">
+        {% endif %}
+        <div class="post-content" style="font-size:1.2rem;">
+            {{ post.content|linebreaks }}
+        </div>
+        <div class="post-actions" style="justify-content: space-between; align-items:center;">
+            <div style="display:flex; gap:20px;">
+                <span class="action-link">
+                    <i class="fas fa-heart" style="color:var(--secondary);"></i> {{ post.likes.count }}
+                </span>
+                <span class="action-link">
+                    <i class="fas fa-comment" style="color:var(--primary);"></i> {{ post.comments.count }}
+                </span>
+            </div>
+            <span class="timestamp">
+                <i class="far fa-calendar-alt"></i> {{ post.timestamp|date:"M d, Y" }}
+            </span>
+        </div>
+    </div>
+    {% empty %}
+    <div class="card" style="text-align:center; padding:40px;">
+        <p style="color:var(--text-light); font-weight:600;">No creations shared yet by this artist.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
