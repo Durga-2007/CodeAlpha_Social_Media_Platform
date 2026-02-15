@@ -1,0 +1,53 @@
+{% extends 'social/base.html' %}
+
+{% block content %}
+<div class="card auth-form fade-in"
+    style="max-width: 600px; margin: 40px auto; background: white; border: 2px solid var(--primary-light); overflow:hidden;">
+    <div
+        style="background: linear-gradient(to right, var(--primary), var(--secondary)); padding: 40px 20px; color:white; text-align:center;">
+        <h2 style="font-family:var(--text-serif); font-size:2.2rem; margin-bottom:10px;"><i class="fas fa-magic"></i>
+            Profile Magic</h2>
+        <p style="font-weight:600; font-size:1rem; opacity:0.9;">Refine your identity in the Hub.</p>
+    </div>
+
+    <div style="padding: 40px 30px;">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <h3
+                style="font-family:var(--text-serif); margin-bottom: 20px; color:var(--primary); display:flex; align-items:center; gap:10px;">
+                <i class="fas fa-id-card"></i> Studio Details
+            </h3>
+            {% for field in u_form %}
+            <div class="form-group">
+                <label style="font-weight:700; color:var(--text-main);">{{ field.label }}</label>
+                {{ field }}
+                {% for error in field.errors %}
+                <div style="color:#ef4444; font-size:0.85rem; font-weight:700;">{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <h3
+                style="font-family:var(--text-serif); margin-top: 40px; margin-bottom: 20px; color:var(--secondary); display:flex; align-items:center; gap:10px;">
+                <i class="fas fa-palette"></i> Artistic Soul
+            </h3>
+            {% for field in p_form %}
+            <div class="form-group">
+                <label style="font-weight:700; color:var(--text-main);">{{ field.label }}</label>
+                {{ field }}
+                <div style="font-size:0.75rem; color:var(--text-light); margin-top:5px;">{{ field.help_text }}</div>
+                {% for error in field.errors %}
+                <div style="color:#ef4444; font-size:0.85rem; font-weight:700;">{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary"
+                style="width:100%; margin-top:30px; padding:18px; border-radius:20px;">
+                <i class="fas fa-save"></i> Save Artistic Profile
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
