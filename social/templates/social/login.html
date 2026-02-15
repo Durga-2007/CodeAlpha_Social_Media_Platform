@@ -1,0 +1,55 @@
+{% extends 'social/base.html' %}
+
+{% block content %}
+<div class="card auth-form fade-in"
+    style="max-width: 500px; margin: 60px auto; padding: 0; overflow:hidden; border:none; box-shadow: 0 30px 60px rgba(0,0,0,0.12);">
+    <div
+        style="background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 50px 30px; text-align:center; color:white;">
+        <i class="fas fa-user-astronaut" style="font-size:3.5rem; margin-bottom:20px; display:block;"></i>
+        <h2 style="font-family:var(--text-serif); font-size:2.5rem; margin-bottom:10px;">Welcome Back</h2>
+        <p style="font-weight:700; opacity:0.9;">The Hub missed your masterpieces.</p>
+    </div>
+
+    <div style="padding: 40px 35px;">
+        <form method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <div
+                style="color:white; background:#ef4444; font-size:0.95rem; margin-bottom:20px; text-align:center; padding:12px; border-radius:12px; font-weight:700;">
+                <i class="fas fa-exclamation-circle"></i> {{ form.non_field_errors.0 }}
+            </div>
+            {% endif %}
+
+            <div class="form-group" style="margin-bottom:25px;">
+                <label for="id_username"
+                    style="display:block; font-weight:800; color:var(--text-main); margin-bottom:10px;">
+                    <i class="fas fa-user" style="color:var(--primary);"></i> Username
+                </label>
+                <input type="text" name="username" id="id_username" required
+                    style="width:100%; padding:15px; border-radius:15px; border:2px solid var(--border); outline:none; font-size:1.1rem; transition:0.3s;"
+                    onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+            </div>
+
+            <div class="form-group" style="margin-bottom:30px;">
+                <label for="id_password"
+                    style="display:block; font-weight:800; color:var(--text-main); margin-bottom:10px;">
+                    <i class="fas fa-lock" style="color:var(--secondary);"></i> Password
+                </label>
+                <input type="password" name="password" id="id_password" required
+                    style="width:100%; padding:15px; border-radius:15px; border:2px solid var(--border); outline:none; font-size:1.1rem; transition:0.3s;"
+                    onfocus="this.style.borderColor='var(--secondary)'" onblur="this.style.borderColor='var(--border)'">
+            </div>
+
+            <button type="submit" class="btn btn-primary"
+                style="width:100%; padding:18px; border-radius:18px; font-size:1.1rem; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);">
+                <i class="fas fa-sign-in-alt"></i> <span>Login to Studio</span>
+            </button>
+        </form>
+
+        <p style="text-align:center; margin-top:30px; font-weight:700; color:var(--text-light);">
+            New artist? <a href="{% url 'register' %}" style="color:var(--primary); text-decoration:none;">Create an
+                account</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
