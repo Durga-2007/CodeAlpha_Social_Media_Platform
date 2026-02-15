@@ -1,0 +1,185 @@
+{% extends 'social/base.html' %}
+
+{% block content %}
+<!-- Premium Hero Section -->
+<div class="hero-section fade-in">
+    <h1>Welcome to the Creative Hub</h1>
+    <p>A sanctuary for poets, storytellers, and visual artists to share their masterpieces.</p>
+</div>
+
+<div class="main-layout fade-in">
+    <div class="feed-column">
+        <div class="card post-form">
+            <h3><i class="fas fa-pen-nib"></i> Share your Masterpiece</h3>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.content }}
+                <div
+                    style="margin-bottom:20px; background:rgba(99, 102, 241, 0.05); padding:20px; border-radius:15px; border:2px dashed var(--primary-light);">
+                    <label
+                        style="display:block; font-size:1rem; font-weight:801; color:var(--primary); margin-bottom:10px;">
+                        <i class="fas fa-cloud-upload-alt"></i> Add an image of your art (Optional)
+                    </label>
+                    {{ form.image }}
+                </div>
+                <div style="display:flex; gap:15px; align-items:center;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Post Creation
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        {% if query %}
+        <h2 style="font-family:var(--text-serif); margin-bottom:25px; color:var(--primary); font-size:2rem;">
+            <i class="fas fa-search"></i> Results for "{{ query }}"
+        </h2>
+        {% endif %}
+
+        <div class="feed">
+            {% for post in posts %}
+            <div class="card post fade-in">
+                <div class="post-header">
+                    <div style="display:flex; align-items:center; gap:15px;">
+                        <div class="story-ring">
+                            {% if post.user.profile.profile_pic %}
+                            <img src="{{ post.user.profile.profile_pic.url }}" class="avatar">
+                            {% else %}
+                            <div class="avatar"
+                                style="background:#e2e8f0; display:flex; align-items:center; justify-content:center;">
+                                <i class="fas fa-user" style="color:#94a3b8;"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <a href="{% url 'profile' post.user.username %}" class="username">
+                                @{{ post.user.username }}
+                            </a>
+                            <span class="timestamp">
+                                <i class="far fa-clock"></i> {{ post.timestamp|timesince }} ago
+                            </span>
+                        </div>
+                    </div>
+                    {% if post.user == user %}
+                    <div class="post-menu">
+                        <a href="{% url 'edit_post' post.id %}" class="action-link" title="Edit Creation">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'delete_post' post.id %}" class="action-link" style="color:#ef4444;"
+                            title="Remove">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if post.image %}
+                <img src="{{ post.image.url }}" alt="Art piece" class="post-image">
+                {% endif %}
+
+                <div class="post-content" style="font-size:1.2rem; color:var(--text-main); margin:15px 0;">
+                    {{ post.content|linebreaks }}
+                </div>
+
+                <div class="post-actions" style="border-top:1px solid rgba(0,0,0,0.05); padding-top:15px;">
+                    <a href="{% url 'like_post' post.id %}"
+                        class="action-link {% if post.is_liked %}liked{% else %}not-liked{% endif %}"
+                        style="font-size:1.1rem;">
+                        {% if post.is_liked %}
+                        <i class="fas fa-heart"></i>
+                        {% else %}
+                        <i class="far fa-heart"></i>
+                        {% endif %}
+                        Liked by {{ post.likes.count }}
+                    </a>
+                    <span class="action-link" style="font-size:1.1rem;">
+                        <i class="fas fa-comment-alt"></i> {{ post.comments.count }} Appreciations
+                    </span>
+                </div>
+
+                <div class="comments-section"
+                    style="background:rgba(99, 102, 241, 0.03); border-radius:20px; padding:20px; margin-top:20px;">
+                    {% for comment in post.comments.all %}
+                    <div class="comment" style="padding:10px 0; border-bottom:1px solid rgba(0,0,0,0.03);">
+                        <strong style="color:var(--secondary);">@{{ comment.user.username }}</strong>: {{
+                        comment.content }}
+                    </div>
+                    {% endfor %}
+
+                    <form action="{% url 'add_comment' post.id %}" method="post" class="comment-form"
+                        style="margin-top:15px; display:flex; gap:10px;">
+                        {% csrf_token %}
+                        <input type="text" name="content" placeholder="Leave a word of appreciation..."
+                            class="comment-input" required
+                            style="width:100%; padding:15px; border-radius:15px; border:2px solid var(--border); outline:none; background:white;">
+                        <button type="submit" class="btn btn-primary" style="padding: 10px 20px; border-radius:15px;">
+                            <i class="fas fa-reply"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% empty %}
+            <div class="card" style="text-align:center; padding:80px 20px; border:2px dashed var(--border);">
+                <i class="fas fa-paint-brush"
+                    style="font-size:4rem; color:var(--primary-light); margin-bottom:20px; display:block; opacity:0.5;"></i>
+                <p style="color:var(--text-light); font-size:1.3rem; font-weight:700;">The Hub is waiting for your
+                    magic. Share your first creation!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Discovery Sidebar -->
+    <div class="sidebar-column">
+        <div class="card sidebar-card" style="position:sticky; top:100px; border-top:5px solid var(--secondary);">
+            <h4 style="font-family:var(--text-serif); margin-bottom:25px; font-size:1.5rem;"><i class="fas fa-fire-alt"
+                    style="color:var(--accent);"></i> Suggested Artists</h4>
+            {% for creator in suggested_creators %}
+            <div class="creator-item"
+                style="padding:15px; border-bottom:1px solid rgba(0,0,0,0.03); display:flex; align-items:center; gap:12px;">
+                <div class="story-ring-mini">
+                    {% if creator.profile.profile_pic %}
+                    <img src="{{ creator.profile.profile_pic.url }}" class="avatar" style="width:40px; height:40px;">
+                    {% else %}
+                    <div class="avatar"
+                        style="width:40px; height:40px; background:#e2e8f0; display:flex; align-items:center; justify-content:center;">
+                        <i class="fas fa-user" style="font-size:16px; color:#94a3b8;"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="creator-info">
+                    <a href="{% url 'profile' creator.username %}" class="username" style="font-size:0.9rem;">
+                        @{{ creator.username }}
+                    </a>
+                    <p style="font-size:0.75rem; color:var(--text-light);">
+                        {{ creator.post_count }} Masterpieces
+                    </p>
+                </div>
+                <form action="{% url 'follow_user' creator.username %}" method="post" style="margin-left:auto;">
+                    {% csrf_token %}
+                    <button type="submit" class="follow-mini-btn"
+                        style="background:linear-gradient(to right, var(--primary), var(--secondary));">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </form>
+            </div>
+            {% empty %}
+            <p style="font-size:1rem; color:var(--text-light); text-align:center; padding:20px 0; font-weight:701;">
+                You've connected with all creators! 🌟</p>
+            {% endfor %}
+            <div style="margin-top:40px;">
+                <h4 style="font-family:var(--text-serif); margin-bottom:20px; font-size:1.5rem;"><i class="fas fa-star"
+                        style="color:var(--accent);"></i> Trending</h4>
+                <div class="tags" style="gap:15px;">
+                    <span class="tag"
+                        style="background:var(--primary); color:white; border:none; padding:10px 20px;">#Poetry</span>
+                    <span class="tag"
+                        style="background:var(--secondary); color:white; border:none; padding:10px 20px;">#VisualArt</span>
+                    <span class="tag"
+                        style="background:var(--accent); color:white; border:none; padding:10px 20px;">#Stories</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
