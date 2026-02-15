@@ -1,0 +1,50 @@
+{% extends 'social/base.html' %}
+
+{% block content %}
+<div class="card fade-in">
+    <h2
+        style="font-family:var(--text-serif); margin-bottom: 30px; font-size:2rem; display:flex; align-items:center; gap:15px;">
+        <i class="fas fa-bell" style="color:var(--accent);"></i> Your Activity Hub
+    </h2>
+    <div class="notifications-list">
+        {% for notif in notifications %}
+        <div class="notif-card {% if not notif.is_read %}notif-unread{% endif %}"
+            style="border-radius:18px; margin-bottom:10px; border:1px solid rgba(0,0,0,0.02);">
+            <div style="font-size:1.5rem; margin-right:15px;">
+                {% if notif.notification_type == 'LIKE' %}
+                <i class="fas fa-heart" style="color:var(--secondary);"></i>
+                {% elif notif.notification_type == 'COMMENT' %}
+                <i class="fas fa-comment-dots" style="color:var(--primary);"></i>
+                {% elif notif.notification_type == 'FOLLOW' %}
+                <i class="fas fa-user-plus" style="color:var(--primary-light);"></i>
+                {% endif %}
+            </div>
+            <div class="notif-content">
+                <strong style="color:var(--primary);">@{{ notif.sender.username }}</strong>
+                {% if notif.notification_type == 'LIKE' %}
+                liked your masterpiece
+                {% if notif.post %}<span style="color:var(--text-light);">"{{ notif.post.content|truncatechars:30
+                    }}"</span>{% endif %}
+                {% elif notif.notification_type == 'COMMENT' %}
+                shared appreciation for
+                {% if notif.post %}<span style="color:var(--text-light);">"{{ notif.post.content|truncatechars:30
+                    }}"</span>{% endif %}
+                {% elif notif.notification_type == 'FOLLOW' %}
+                is now following your creative journey.
+                {% endif %}
+                <div
+                    style="font-size:0.85rem; font-weight:700; color:var(--text-light); margin-top:5px; display:flex; align-items:center; gap:5px;">
+                    <i class="far fa-clock"></i> {{ notif.timestamp|timesince }} ago
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div style="text-align:center; padding: 60px 20px;">
+            <i class="fas fa-ghost" style="font-size:3rem; color:var(--border); margin-bottom:20px; display:block;"></i>
+            <p style="color:var(--text-light); font-weight:700; font-size:1.1rem;">No activity yet. Let your creativity
+                be seen!</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
