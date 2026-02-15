@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreativeHub — Share your Masterpiece</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/social/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="/" class="logo">CreativeHub</a>
+
+            
+
+            <div class="nav-links">
+                
+                <a href="/login/"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="/register/"><i class="fas fa-user-plus"></i> Register</a>
+                
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+
+        
+<div class="card auth-form fade-in"
+    style="max-width: 500px; margin: 60px auto; padding: 0; overflow:hidden; border:none; box-shadow: 0 30px 60px rgba(0,0,0,0.12);">
+    <div
+        style="background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 50px 30px; text-align:center; color:white;">
+        <i class="fas fa-user-astronaut" style="font-size:3.5rem; margin-bottom:20px; display:block;"></i>
+        <h2 style="font-family:var(--text-serif); font-size:2.5rem; margin-bottom:10px;">Welcome Back</h2>
+        <p style="font-weight:700; opacity:0.9;">The Hub missed your masterpieces.</p>
+    </div>
+
+    <div style="padding: 40px 35px;">
+        <form method="post">
+            <input type="hidden" name="csrfmiddlewaretoken" value="VvF8aSp39xFzXdlnEoEkYlWoH9oFpcQvs30dVBEJPRDtTNQVWu8bwnm80bgEsQww">
+            
+
+            <div class="form-group" style="margin-bottom:25px;">
+                <label for="id_username"
+                    style="display:block; font-weight:800; color:var(--text-main); margin-bottom:10px;">
+                    <i class="fas fa-user" style="color:var(--primary);"></i> Username
+                </label>
+                <input type="text" name="username" id="id_username" required
+                    style="width:100%; padding:15px; border-radius:15px; border:2px solid var(--border); outline:none; font-size:1.1rem; transition:0.3s;"
+                    onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'">
+            </div>
+
+            <div class="form-group" style="margin-bottom:30px;">
+                <label for="id_password"
+                    style="display:block; font-weight:800; color:var(--text-main); margin-bottom:10px;">
+                    <i class="fas fa-lock" style="color:var(--secondary);"></i> Password
+                </label>
+                <input type="password" name="password" id="id_password" required
+                    style="width:100%; padding:15px; border-radius:15px; border:2px solid var(--border); outline:none; font-size:1.1rem; transition:0.3s;"
+                    onfocus="this.style.borderColor='var(--secondary)'" onblur="this.style.borderColor='var(--border)'">
+            </div>
+
+            <button type="submit" class="btn btn-primary"
+                style="width:100%; padding:18px; border-radius:18px; font-size:1.1rem; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);">
+                <i class="fas fa-sign-in-alt"></i> <span>Login to Studio</span>
+            </button>
+        </form>
+
+        <p style="text-align:center; margin-top:30px; font-weight:700; color:var(--text-light);">
+            New artist? <a href="/register/" style="color:var(--primary); text-decoration:none;">Create an
+                account</a>
+        </p>
+    </div>
+</div>
+
+    </main>
+
+    <footer style="text-align:center; padding:40px 0; color:var(--text-light); font-weight:700; opacity:0.8;">
+        <p>&copy; 2026 CreativeHub. Share the Magic.</p>
+    </footer>
+
+    <script src="/static/social/voice.js"></script>
+</body>
+
+</html>
