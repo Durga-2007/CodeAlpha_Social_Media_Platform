@@ -100,9 +100,10 @@
                 <div class="comments-section"
                     style="background:rgba(99, 102, 241, 0.03); border-radius:20px; padding:20px; margin-top:20px;">
                     {% for comment in post.comments.all %}
-                    <div class="comment" style="padding:10px 0; border-bottom:1px solid rgba(0,0,0,0.03);">
-                        <strong style="color:var(--secondary);">@{{ comment.user.username }}</strong>: {{
-                        comment.content }}
+                    <div class="comment"
+                        style="padding:12px 15px; background:white; border-radius:12px; margin-bottom:10px; border:1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                        <strong style="color:var(--secondary); font-weight:700;">@{{ comment.user.username }}</strong>
+                        <span style="color:var(--text-main); margin-left:5px;">{{ comment.content }}</span>
                     </div>
                     {% endfor %}
 
